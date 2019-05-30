@@ -29,8 +29,8 @@ async function main(projectId) {
   const {GrafeasClient} = require('@google-cloud/grafeas');
   const client = new GrafeasClient({
     sslCreds: grpc.credentials.createInsecure(), // or any other credentials object.
-    servicePath: '0.0.0.0', // overriding the service path
-    port: 8080, // and override port if needed
+    servicePath: '0.0.0.0', // overriding the service path.
+    port: 8080, // overriding the port.
   });
 
   // populate the request.
