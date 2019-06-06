@@ -34,6 +34,6 @@ describe('GrafeasSystemTest', () => {
     // run the request.
     const [resp] = await client.listOccurrences(request);
 
-    assert.gte(resp.length, 0);
+    assert.isAtLeast(resp.length, 0);
   });
 });
