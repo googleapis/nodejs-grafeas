@@ -4,6 +4,13 @@
 
 [1]: https://www.npmjs.com/package/@google-cloud/grafeas?activeTab=versions
 
+### [1.0.1](https://www.github.com/googleapis/nodejs-grafeas/compare/v1.0.0...v1.0.1) (2019-06-14)
+
+
+### Bug Fixes
+
+* **docs:** move to new client docs URL ([#12](https://www.github.com/googleapis/nodejs-grafeas/issues/12)) ([12ece17](https://www.github.com/googleapis/nodejs-grafeas/commit/12ece17))
+
 ## 1.0.0 (2019-06-06)
 
 
