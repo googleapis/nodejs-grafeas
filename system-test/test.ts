@@ -14,26 +14,27 @@
 
 'use strict';
 
-const {assert} = require('chai');
-const {describe, it} = require('mocha');
+import {describe, it} from 'mocha';
+import * as assert from 'assert';
+import {GrafeasClient} from '../src';
 
 const projectId = process.env.GCLOUD_PROJECT;
 
 describe('GrafeasSystemTest', () => {
   it('lists occurrences', async () => {
     // instantiate the client.
-    const {GrafeasClient} = require('../');
     const client = new GrafeasClient();
 
     // create the request.
-    const formattedName = client.projectPath(projectId);
+    const formattedName = client.projectPath(projectId!);
     const request = {
       parent: formattedName,
     };
 
     // run the request.
     const [resp] = await client.listOccurrences(request);
+    console.warn(resp);
 
-    assert.isAtLeast(resp.length, 0);
+    assert.ok(resp.length > 0);
   });
 });
