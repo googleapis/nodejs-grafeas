@@ -16,7 +16,7 @@
 // ** https://github.com/googleapis/gapic-generator-typescript **
 // ** All changes to this file may be overwritten. **
 
-import {GrafeasClient} from 'google-cloud/grafeas';
+import {GrafeasClient} from '@google-cloud/grafeas';
 
 function main() {
   const grafeasClient = new GrafeasClient();

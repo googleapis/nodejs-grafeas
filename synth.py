@@ -29,7 +29,7 @@ for version in versions:
    version,
    generator_args={
      "grpc-service-config": f"grafeas/{version}/grafeas_grpc_service_config.json",
-     "package-name":f"google-cloud/grafeas"
+     "package-name":f"@google-cloud/grafeas"
      },
      proto_path=f'/grafeas/{version}',
      extra_proto_files=['google/cloud/common_resources.proto'],

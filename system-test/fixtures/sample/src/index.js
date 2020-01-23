@@ -18,7 +18,7 @@
 
 
 /* eslint-disable node/no-missing-require, no-unused-vars */
-const grafeas = require('google-cloud/grafeas');
+const grafeas = require('@google-cloud/grafeas');
 
 function main() {
   const grafeasClient = new grafeas.GrafeasClient();
