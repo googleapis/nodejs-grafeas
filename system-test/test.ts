@@ -18,7 +18,7 @@ import {GrafeasClient} from '../src';
 const projectId = process.env.GCLOUD_PROJECT;
 
 describe('GrafeasSystemTest', () => {
-  it('lists occurrences', async (done) => {
+  it('lists occurrences', async () => {
     // instantiate the client.
     const client = new GrafeasClient();
 
@@ -33,6 +33,5 @@ describe('GrafeasSystemTest', () => {
     console.warn(resp);
 
     assert.ok(resp.length > 0);
-    done();
-  });
+  }).timeout(30000);
 });
