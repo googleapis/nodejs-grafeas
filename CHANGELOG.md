@@ -4,6 +4,13 @@
 
 [1]: https://www.npmjs.com/package/@google-cloud/grafeas?activeTab=versions
 
+### [2.5.3](https://www.github.com/googleapis/nodejs-grafeas/compare/v2.5.2...v2.5.3) (2020-02-12)
+
+
+### Bug Fixes
+
+* pass x-goog-request-params header for streaming calls ([c44a06b](https://www.github.com/googleapis/nodejs-grafeas/commit/c44a06baf2c7fc390b14af2596fb5fe03fde54a7))
+
 ### [2.5.2](https://www.github.com/googleapis/nodejs-grafeas/compare/v2.5.1...v2.5.2) (2020-02-01)
 
 
