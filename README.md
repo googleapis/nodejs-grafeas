@@ -56,26 +56,26 @@ npm install @google-cloud/grafeas
 
 ```javascript
 
-  // const projectId = 'my-project';
+// const projectId = 'my-project';
 
-  // instantiate the client.
-  const grpc = require('@grpc/grpc-js');
-  const {GrafeasClient} = require('@google-cloud/grafeas');
-  const client = new GrafeasClient({
-    sslCreds: grpc.credentials.createInsecure(), // or any other credentials object.
-    servicePath: '0.0.0.0', // overriding the service path.
-    port: 8080, // overriding the port.
-  });
+// instantiate the client.
+const grpc = require('@grpc/grpc-js');
+const {GrafeasClient} = require('@google-cloud/grafeas');
+const client = new GrafeasClient({
+  sslCreds: grpc.credentials.createInsecure(), // or any other credentials object.
+  servicePath: '0.0.0.0', // overriding the service path.
+  port: 8080, // overriding the port.
+});
 
-  // populate the request.
-  const formattedName = client.projectPath(projectId);
-  const request = {
-    parent: formattedName,
-  };
+// populate the request.
+const formattedName = client.projectPath(projectId);
+const request = {
+  parent: formattedName,
+};
 
-  // fetch the list of occurrences.
-  const [resp] = await client.listOccurrences(request);
-  console.info(resp);
+// fetch the list of occurrences.
+const [resp] = await client.listOccurrences(request);
+console.info(resp);
 
 ```
 
@@ -118,11 +118,13 @@ More Information: [Google Cloud Platform Launch Stages][launch_stages]
 
 Contributions welcome! See the [Contributing Guide](https://github.com/googleapis/nodejs-grafeas/blob/master/CONTRIBUTING.md).
 
-Please note that this `README.md`, the `samples/README.md`,
+Please note that this [README.md](README.md), the [samples/README.md](samples/README.md),
 and a variety of configuration files in this repository (including `.nycrc` and `tsconfig.json`)
-are generated from a central template. To edit one of these files, make an edit
-to its template in this
-[directory](https://github.com/googleapis/synthtool/tree/master/synthtool/gcp/templates/node_library).
+are generated from a central template.
+
+If you would like to make edits to one of those files
+(or if you aren't certain if the file you're changing is one, check in the template repository before making changes),
+look for the file in the [template](https://github.com/googleapis/synthtool/tree/master/synthtool/gcp/templates/node_library).
 
 ## License
 
