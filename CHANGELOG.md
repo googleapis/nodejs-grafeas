@@ -4,6 +4,13 @@
 
 [1]: https://www.npmjs.com/package/@google-cloud/grafeas?activeTab=versions
 
+### [3.0.1](https://www.github.com/googleapis/nodejs-grafeas/compare/v3.0.0...v3.0.1) (2020-04-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @grpc/grpc-js to ^0.8.0 ([#143](https://www.github.com/googleapis/nodejs-grafeas/issues/143)) ([13be859](https://www.github.com/googleapis/nodejs-grafeas/commit/13be859361752c50a08b86614320fc8ef61ff125))
+
 ## [3.0.0](https://www.github.com/googleapis/nodejs-grafeas/compare/v2.7.0...v3.0.0) (2020-04-12)
 
 
