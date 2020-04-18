@@ -34,15 +34,11 @@ for version in versions:
      "grpc-service-config": f"grafeas/{version}/grafeas_grpc_service_config.json",
      "package-name":"@google-cloud/grafeas"
      },
-     proto_path=f'/grafeas/{version}',
-     extra_proto_files=['google/cloud/common_resources.proto'],
+     proto_path=f'/grafeas/{version}'
      )
  s.copy(library, excludes=[
    "README.md",
-   "package.json",
-   "src/v1/gapic-grafeas-v1.ts",
-   "test/gapic-v1.ts",
-   "protos/google/*"
+   "package.json"
  ])
 
 
