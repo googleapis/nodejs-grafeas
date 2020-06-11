@@ -3,23 +3,15 @@
     {
       "git": {
         "name": ".",
-        "remote": "https://github.com/googleapis/nodejs-grafeas.git",
-        "sha": "4d2aa22971cb86bcfc427e95c31db63aa385c740"
-      }
-    },
-    {
-      "git": {
-        "name": "googleapis",
-        "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "6dfd72d028a0d0a43764e060f7b15e004385c3a1",
-        "internalRef": "310168181"
+        "remote": "git@github.com:googleapis/nodejs-grafeas.git",
+        "sha": "b65bb3426c839f6514826d87c7a65ae7dcb85b8d"
       }
     },
     {
       "git": {
         "name": "synthtool",
         "remote": "https://github.com/googleapis/synthtool.git",
-        "sha": "1c92077459db3dc50741e878f98b08c6261181e0"
+        "sha": "a0ee80e0492a03b9b2bfefb5cca7eaf17bf10438"
       }
     }
   ],
