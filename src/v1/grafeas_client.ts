@@ -73,10 +73,8 @@ export class GrafeasClient {
   /**
    * Construct an instance of GrafeasClient.
    *
-   * @param {object} [options] - The configuration object.
-   * The options accepted by the constructor are described in detail
-   * in [this document](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#creating-the-client-instance).
-   * The common options are:
+   * @param {object} [options] - The configuration object. See the subsequent
+   *   parameters for more details.
    * @param {object} [options.credentials] - Credentials object.
    * @param {string} [options.credentials.client_email]
    * @param {string} [options.credentials.private_key]
@@ -96,33 +94,42 @@ export class GrafeasClient {
    *     your project ID will be detected automatically.
    * @param {string} [options.apiEndpoint] - The domain name of the
    *     API remote host.
-   * @param {gax.ClientConfig} [options.clientConfig] - client configuration override.
-   *     TODO(@alexander-fenster): link to gax documentation.
-   * @param {boolean} fallback - Use HTTP fallback mode.
-   *     In fallback mode, a special browser-compatible transport implementation is used
-   *     instead of gRPC transport. In browser context (if the `window` object is defined)
-   *     the fallback mode is enabled automatically; set `options.fallback` to `false`
-   *     if you need to override this behavior.
    */
+
   constructor(opts?: ClientOptions) {
-    // Ensure that options include all the required fields.
+    // Ensure that options include the service address and port.
     const staticMembers = this.constructor as typeof GrafeasClient;
     const servicePath =
-      opts?.servicePath || opts?.apiEndpoint || staticMembers.servicePath;
-    const port = opts?.port || staticMembers.port;
-    const clientConfig = opts?.clientConfig ?? {};
-    const fallback = opts?.fallback ?? typeof window !== 'undefined';
-    opts = Object.assign({servicePath, port, clientConfig, fallback}, opts);
+      opts && opts.servicePath
+        ? opts.servicePath
+        : opts && opts.apiEndpoint
+        ? opts.apiEndpoint
+        : staticMembers.servicePath;
+    const port = opts && opts.port ? opts.port : staticMembers.port;
 
-    // If scopes are unset in options and we're connecting to a non-default endpoint, set scopes just in case.
-    if (servicePath !== staticMembers.servicePath && !('scopes' in opts)) {
-      opts['scopes'] = staticMembers.scopes;
+    if (!opts) {
+      opts = {servicePath, port};
     }
+    opts.servicePath = opts.servicePath || servicePath;
+    opts.port = opts.port || port;
 
-    // Choose either gRPC or proto-over-HTTP implementation of google-gax.
+    // users can override the config from client side, like retry codes name.
+    // The detailed structure of the clientConfig can be found here: https://github.com/googleapis/gax-nodejs/blob/master/src/gax.ts#L546
+    // The way to override client config for Showcase API:
+    //
+    // const customConfig = {"interfaces": {"google.showcase.v1beta1.Echo": {"methods": {"Echo": {"retry_codes_name": "idempotent", "retry_params_name": "default"}}}}}
+    // const showcaseClient = new showcaseClient({ projectId, customConfig });
+    opts.clientConfig = opts.clientConfig || {};
+
+    // If we're running in browser, it's OK to omit `fallback` since
+    // google-gax has `browser` field in its `package.json`.
+    // For Electron (which does not respect `browser` field),
+    // pass `{fallback: true}` to the GrafeasClient constructor.
     this._gaxModule = opts.fallback ? gax.fallback : gax;
 
-    // Create a `gaxGrpc` object, with any grpc-specific options sent to the client.
+    // Create a `gaxGrpc` object, with any grpc-specific options
+    // sent to the client.
+    opts.scopes = (this.constructor as typeof GrafeasClient).scopes;
     this._gaxGrpc = new this._gaxModule.GrpcClient(opts);
 
     // Save options to use in initialize() method.
@@ -130,11 +137,6 @@ export class GrafeasClient {
 
     // Save the auth object to the client, for use by other methods.
     this.auth = this._gaxGrpc.auth as gax.GoogleAuth;
-
-    // Set the default scopes in auth client if needed.
-    if (servicePath === staticMembers.servicePath) {
-      this.auth.defaultScopes = staticMembers.scopes;
-    }
 
     // Determine the client header string.
     const clientHeader = [`gax/${this._gaxModule.version}`, `gapic/${version}`];
@@ -291,7 +293,6 @@ export class GrafeasClient {
 
   /**
    * The DNS address for this API service.
-   * @returns {string} The DNS address for this service.
    */
   static get servicePath() {
     return 'containeranalysis.googleapis.com';
@@ -300,7 +301,6 @@ export class GrafeasClient {
   /**
    * The DNS address for this API service - same as servicePath(),
    * exists for compatibility reasons.
-   * @returns {string} The DNS address for this service.
    */
   static get apiEndpoint() {
     return 'containeranalysis.googleapis.com';
@@ -308,7 +308,6 @@ export class GrafeasClient {
 
   /**
    * The port for this API service.
-   * @returns {number} The default port for this service.
    */
   static get port() {
     return 443;
@@ -317,7 +316,6 @@ export class GrafeasClient {
   /**
    * The scopes needed to make gRPC calls for every method defined
    * in this service.
-   * @returns {string[]} List of default scopes.
    */
   static get scopes() {
     return [];
@@ -327,7 +325,8 @@ export class GrafeasClient {
   getProjectId(callback: Callback<string, undefined, undefined>): void;
   /**
    * Return the project ID used by this class.
-   * @returns {Promise} A promise that resolves to string containing the project ID.
+   * @param {function(Error, string)} callback - the callback to
+   *   be called with the current project Id.
    */
   getProjectId(
     callback?: Callback<string, undefined, undefined>
@@ -381,11 +380,7 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing [Occurrence]{@link grafeas.v1.Occurrence}.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods)
-   *   for more details and examples.
-   * @example
-   * const [response] = await client.getOccurrence(request);
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   getOccurrence(
     request: protos.grafeas.v1.IGetOccurrenceRequest,
@@ -468,11 +463,7 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing [Empty]{@link google.protobuf.Empty}.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods)
-   *   for more details and examples.
-   * @example
-   * const [response] = await client.deleteOccurrence(request);
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   deleteOccurrence(
     request: protos.grafeas.v1.IDeleteOccurrenceRequest,
@@ -555,11 +546,7 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing [Occurrence]{@link grafeas.v1.Occurrence}.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods)
-   *   for more details and examples.
-   * @example
-   * const [response] = await client.createOccurrence(request);
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   createOccurrence(
     request: protos.grafeas.v1.ICreateOccurrenceRequest,
@@ -642,11 +629,7 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing [BatchCreateOccurrencesResponse]{@link grafeas.v1.BatchCreateOccurrencesResponse}.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods)
-   *   for more details and examples.
-   * @example
-   * const [response] = await client.batchCreateOccurrences(request);
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   batchCreateOccurrences(
     request: protos.grafeas.v1.IBatchCreateOccurrencesRequest,
@@ -735,11 +718,7 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing [Occurrence]{@link grafeas.v1.Occurrence}.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods)
-   *   for more details and examples.
-   * @example
-   * const [response] = await client.updateOccurrence(request);
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   updateOccurrence(
     request: protos.grafeas.v1.IUpdateOccurrenceRequest,
@@ -821,11 +800,7 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing [Note]{@link grafeas.v1.Note}.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods)
-   *   for more details and examples.
-   * @example
-   * const [response] = await client.getOccurrenceNote(request);
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   getOccurrenceNote(
     request: protos.grafeas.v1.IGetOccurrenceNoteRequest,
@@ -906,11 +881,7 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing [Note]{@link grafeas.v1.Note}.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods)
-   *   for more details and examples.
-   * @example
-   * const [response] = await client.getNote(request);
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   getNote(
     request: protos.grafeas.v1.IGetNoteRequest,
@@ -991,11 +962,7 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing [Empty]{@link google.protobuf.Empty}.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods)
-   *   for more details and examples.
-   * @example
-   * const [response] = await client.deleteNote(request);
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   deleteNote(
     request: protos.grafeas.v1.IDeleteNoteRequest,
@@ -1080,11 +1047,7 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing [Note]{@link grafeas.v1.Note}.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods)
-   *   for more details and examples.
-   * @example
-   * const [response] = await client.createNote(request);
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   createNote(
     request: protos.grafeas.v1.ICreateNoteRequest,
@@ -1167,11 +1130,7 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing [BatchCreateNotesResponse]{@link grafeas.v1.BatchCreateNotesResponse}.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods)
-   *   for more details and examples.
-   * @example
-   * const [response] = await client.batchCreateNotes(request);
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   batchCreateNotes(
     request: protos.grafeas.v1.IBatchCreateNotesRequest,
@@ -1256,11 +1215,7 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is an object representing [Note]{@link grafeas.v1.Note}.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#regular-methods)
-   *   for more details and examples.
-   * @example
-   * const [response] = await client.updateNote(request);
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   updateNote(
     request: protos.grafeas.v1.IUpdateNoteRequest,
@@ -1349,14 +1304,19 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is Array of [Occurrence]{@link grafeas.v1.Occurrence}.
-   *   The client library will perform auto-pagination by default: it will call the API as many
+   *   The client library support auto-pagination by default: it will call the API as many
    *   times as needed and will merge results from all the pages into this array.
-   *   Note that it can affect your quota.
-   *   We recommend using `listOccurrencesAsync()`
-   *   method described below for async iteration which you can stop as needed.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination)
-   *   for more details and examples.
+   *
+   *   When autoPaginate: false is specified through options, the array has three elements.
+   *   The first element is Array of [Occurrence]{@link grafeas.v1.Occurrence} that corresponds to
+   *   the one page received from the API server.
+   *   If the second element is not null it contains the request object of type [ListOccurrencesRequest]{@link grafeas.v1.ListOccurrencesRequest}
+   *   that can be used to obtain the next page of the results.
+   *   If it is null, the next page does not exist.
+   *   The third element contains the raw response received from the API server. Its type is
+   *   [ListOccurrencesResponse]{@link grafeas.v1.ListOccurrencesResponse}.
+   *
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   listOccurrences(
     request: protos.grafeas.v1.IListOccurrencesRequest,
@@ -1400,7 +1360,18 @@ export class GrafeasClient {
   }
 
   /**
-   * Equivalent to `method.name.toCamelCase()`, but returns a NodeJS Stream object.
+   * Equivalent to {@link listOccurrences}, but returns a NodeJS Stream object.
+   *
+   * This fetches the paged responses for {@link listOccurrences} continuously
+   * and invokes the callback registered for 'data' event for each element in the
+   * responses.
+   *
+   * The returned object has 'end' method when no more elements are required.
+   *
+   * autoPaginate option will be ignored.
+   *
+   * @see {@link https://nodejs.org/api/stream.html}
+   *
    * @param {Object} request
    *   The request object that will be sent.
    * @param {string} request.parent
@@ -1417,13 +1388,6 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Stream}
    *   An object stream which emits an object representing [Occurrence]{@link grafeas.v1.Occurrence} on 'data' event.
-   *   The client library will perform auto-pagination by default: it will call the API as many
-   *   times as needed. Note that it can affect your quota.
-   *   We recommend using `listOccurrencesAsync()`
-   *   method described below for async iteration which you can stop as needed.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination)
-   *   for more details and examples.
    */
   listOccurrencesStream(
     request?: protos.grafeas.v1.IListOccurrencesRequest,
@@ -1448,9 +1412,10 @@ export class GrafeasClient {
   }
 
   /**
-   * Equivalent to `listOccurrences`, but returns an iterable object.
+   * Equivalent to {@link listOccurrences}, but returns an iterable object.
    *
-   * `for`-`await`-`of` syntax is used with the iterable to get response elements on-demand.
+   * for-await-of syntax is used with the iterable to recursively get response element on-demand.
+   *
    * @param {Object} request
    *   The request object that will be sent.
    * @param {string} request.parent
@@ -1466,18 +1431,7 @@ export class GrafeasClient {
    * @param {object} [options]
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Object}
-   *   An iterable Object that allows [async iteration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols).
-   *   When you iterate the returned iterable, each element will be an object representing
-   *   [Occurrence]{@link grafeas.v1.Occurrence}. The API will be called under the hood as needed, once per the page,
-   *   so you can stop the iteration when you don't need more results.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination)
-   *   for more details and examples.
-   * @example
-   * const iterable = client.listOccurrencesAsync(request);
-   * for await (const response of iterable) {
-   *   // process response
-   * }
+   *   An iterable Object that conforms to @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols.
    */
   listOccurrencesAsync(
     request?: protos.grafeas.v1.IListOccurrencesRequest,
@@ -1547,14 +1501,19 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is Array of [Note]{@link grafeas.v1.Note}.
-   *   The client library will perform auto-pagination by default: it will call the API as many
+   *   The client library support auto-pagination by default: it will call the API as many
    *   times as needed and will merge results from all the pages into this array.
-   *   Note that it can affect your quota.
-   *   We recommend using `listNotesAsync()`
-   *   method described below for async iteration which you can stop as needed.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination)
-   *   for more details and examples.
+   *
+   *   When autoPaginate: false is specified through options, the array has three elements.
+   *   The first element is Array of [Note]{@link grafeas.v1.Note} that corresponds to
+   *   the one page received from the API server.
+   *   If the second element is not null it contains the request object of type [ListNotesRequest]{@link grafeas.v1.ListNotesRequest}
+   *   that can be used to obtain the next page of the results.
+   *   If it is null, the next page does not exist.
+   *   The third element contains the raw response received from the API server. Its type is
+   *   [ListNotesResponse]{@link grafeas.v1.ListNotesResponse}.
+   *
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   listNotes(
     request: protos.grafeas.v1.IListNotesRequest,
@@ -1598,7 +1557,18 @@ export class GrafeasClient {
   }
 
   /**
-   * Equivalent to `method.name.toCamelCase()`, but returns a NodeJS Stream object.
+   * Equivalent to {@link listNotes}, but returns a NodeJS Stream object.
+   *
+   * This fetches the paged responses for {@link listNotes} continuously
+   * and invokes the callback registered for 'data' event for each element in the
+   * responses.
+   *
+   * The returned object has 'end' method when no more elements are required.
+   *
+   * autoPaginate option will be ignored.
+   *
+   * @see {@link https://nodejs.org/api/stream.html}
+   *
    * @param {Object} request
    *   The request object that will be sent.
    * @param {string} request.parent
@@ -1615,13 +1585,6 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Stream}
    *   An object stream which emits an object representing [Note]{@link grafeas.v1.Note} on 'data' event.
-   *   The client library will perform auto-pagination by default: it will call the API as many
-   *   times as needed. Note that it can affect your quota.
-   *   We recommend using `listNotesAsync()`
-   *   method described below for async iteration which you can stop as needed.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination)
-   *   for more details and examples.
    */
   listNotesStream(
     request?: protos.grafeas.v1.IListNotesRequest,
@@ -1646,9 +1609,10 @@ export class GrafeasClient {
   }
 
   /**
-   * Equivalent to `listNotes`, but returns an iterable object.
+   * Equivalent to {@link listNotes}, but returns an iterable object.
    *
-   * `for`-`await`-`of` syntax is used with the iterable to get response elements on-demand.
+   * for-await-of syntax is used with the iterable to recursively get response element on-demand.
+   *
    * @param {Object} request
    *   The request object that will be sent.
    * @param {string} request.parent
@@ -1664,18 +1628,7 @@ export class GrafeasClient {
    * @param {object} [options]
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Object}
-   *   An iterable Object that allows [async iteration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols).
-   *   When you iterate the returned iterable, each element will be an object representing
-   *   [Note]{@link grafeas.v1.Note}. The API will be called under the hood as needed, once per the page,
-   *   so you can stop the iteration when you don't need more results.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination)
-   *   for more details and examples.
-   * @example
-   * const iterable = client.listNotesAsync(request);
-   * for await (const response of iterable) {
-   *   // process response
-   * }
+   *   An iterable Object that conforms to @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols.
    */
   listNotesAsync(
     request?: protos.grafeas.v1.IListNotesRequest,
@@ -1746,14 +1699,19 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
    *   The first element of the array is Array of [Occurrence]{@link grafeas.v1.Occurrence}.
-   *   The client library will perform auto-pagination by default: it will call the API as many
+   *   The client library support auto-pagination by default: it will call the API as many
    *   times as needed and will merge results from all the pages into this array.
-   *   Note that it can affect your quota.
-   *   We recommend using `listNoteOccurrencesAsync()`
-   *   method described below for async iteration which you can stop as needed.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination)
-   *   for more details and examples.
+   *
+   *   When autoPaginate: false is specified through options, the array has three elements.
+   *   The first element is Array of [Occurrence]{@link grafeas.v1.Occurrence} that corresponds to
+   *   the one page received from the API server.
+   *   If the second element is not null it contains the request object of type [ListNoteOccurrencesRequest]{@link grafeas.v1.ListNoteOccurrencesRequest}
+   *   that can be used to obtain the next page of the results.
+   *   If it is null, the next page does not exist.
+   *   The third element contains the raw response received from the API server. Its type is
+   *   [ListNoteOccurrencesResponse]{@link grafeas.v1.ListNoteOccurrencesResponse}.
+   *
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   listNoteOccurrences(
     request: protos.grafeas.v1.IListNoteOccurrencesRequest,
@@ -1797,7 +1755,18 @@ export class GrafeasClient {
   }
 
   /**
-   * Equivalent to `method.name.toCamelCase()`, but returns a NodeJS Stream object.
+   * Equivalent to {@link listNoteOccurrences}, but returns a NodeJS Stream object.
+   *
+   * This fetches the paged responses for {@link listNoteOccurrences} continuously
+   * and invokes the callback registered for 'data' event for each element in the
+   * responses.
+   *
+   * The returned object has 'end' method when no more elements are required.
+   *
+   * autoPaginate option will be ignored.
+   *
+   * @see {@link https://nodejs.org/api/stream.html}
+   *
    * @param {Object} request
    *   The request object that will be sent.
    * @param {string} request.name
@@ -1813,13 +1782,6 @@ export class GrafeasClient {
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Stream}
    *   An object stream which emits an object representing [Occurrence]{@link grafeas.v1.Occurrence} on 'data' event.
-   *   The client library will perform auto-pagination by default: it will call the API as many
-   *   times as needed. Note that it can affect your quota.
-   *   We recommend using `listNoteOccurrencesAsync()`
-   *   method described below for async iteration which you can stop as needed.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination)
-   *   for more details and examples.
    */
   listNoteOccurrencesStream(
     request?: protos.grafeas.v1.IListNoteOccurrencesRequest,
@@ -1844,9 +1806,10 @@ export class GrafeasClient {
   }
 
   /**
-   * Equivalent to `listNoteOccurrences`, but returns an iterable object.
+   * Equivalent to {@link listNoteOccurrences}, but returns an iterable object.
    *
-   * `for`-`await`-`of` syntax is used with the iterable to get response elements on-demand.
+   * for-await-of syntax is used with the iterable to recursively get response element on-demand.
+   *
    * @param {Object} request
    *   The request object that will be sent.
    * @param {string} request.name
@@ -1861,18 +1824,7 @@ export class GrafeasClient {
    * @param {object} [options]
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Object}
-   *   An iterable Object that allows [async iteration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols).
-   *   When you iterate the returned iterable, each element will be an object representing
-   *   [Occurrence]{@link grafeas.v1.Occurrence}. The API will be called under the hood as needed, once per the page,
-   *   so you can stop the iteration when you don't need more results.
-   *   Please see the
-   *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination)
-   *   for more details and examples.
-   * @example
-   * const iterable = client.listNoteOccurrencesAsync(request);
-   * for await (const response of iterable) {
-   *   // process response
-   * }
+   *   An iterable Object that conforms to @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols.
    */
   listNoteOccurrencesAsync(
     request?: protos.grafeas.v1.IListNoteOccurrencesRequest,
@@ -1998,10 +1950,9 @@ export class GrafeasClient {
   }
 
   /**
-   * Terminate the gRPC channel and close the client.
+   * Terminate the GRPC channel and close the client.
    *
    * The client will no longer be usable and all future behavior is undefined.
-   * @returns {Promise} A promise that resolves when the client is closed.
    */
   close(): Promise<void> {
     this.initialize();
