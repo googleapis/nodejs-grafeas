@@ -4,15 +4,15 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/nodejs-grafeas.git",
-        "sha": "66dad1103e53c6585215e4a0aae98616a3adc8a3"
+        "sha": "6639983a7340df1a8bde5f0fc0f10cbe3ec8add4"
       }
     },
     {
       "git": {
         "name": "googleapis",
         "remote": "https://github.com/googleapis/googleapis.git",
-        "sha": "b759c563bacf9cd15749be4d2bdd276d3f48ee29",
-        "internalRef": "341102751"
+        "sha": "4c5071b615d96ef9dfd6a63d8429090f1f2872bb",
+        "internalRef": "327369997"
       }
     },
     {
@@ -87,6 +87,7 @@
     "README.md",
     "api-extractor.json",
     "linkinator.config.json",
+    "package-lock.json.1980538940",
     "protos/grafeas/v1/attestation.proto",
     "protos/grafeas/v1/build.proto",
     "protos/grafeas/v1/common.proto",
@@ -104,6 +105,7 @@
     "protos/protos.json",
     "renovate.json",
     "samples/README.md",
+    "samples/package-lock.json.47856153",
     "src/index.ts",
     "src/v1/grafeas_client.ts",
     "src/v1/grafeas_client_config.json",
