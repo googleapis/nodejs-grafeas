@@ -18,15 +18,8 @@
 
 import {GrafeasClient} from '@google-cloud/grafeas';
 
-// check that the client class type name can be used
-function doStuffWithGrafeasClient(client: GrafeasClient) {
-  client.close();
-}
-
 function main() {
-  // check that the client instance can be created
-  const grafeasClient = new GrafeasClient();
-  doStuffWithGrafeasClient(grafeasClient);
+  new GrafeasClient();
 }
 
 main();
