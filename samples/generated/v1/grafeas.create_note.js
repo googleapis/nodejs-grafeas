@@ -12,19 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
-function main(name) {
-  // [START grafeas_get_note_sample]
+function main(parent, noteId, note) {
+  // [START grafeas_create_note_sample]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
   /**
-   *  The name of the note in the form of
-   *  `projects/[PROVIDER_ID]/notes/[NOTE_ID]`.
+   *  The name of the project in the form of `projects/[PROJECT_ID]`, under which
+   *  the note is to be created.
    */
-  // const name = 'abc123'
+  // const parent = 'abc123'
+  /**
+   *  The ID to use for this note.
+   */
+  // const noteId = 'abc123'
+  /**
+   *  The note to create.
+   */
+  // const note = ''
 
   // Imports the Grafeas library
   const {GrafeasClient} = require('@google-cloud/grafeas').v1;
@@ -32,19 +39,21 @@ function main(name) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function getNote() {
+  async function createNote() {
     // Construct request
     const request = {
-      name,
+      parent,
+      noteId,
+      note,
     };
 
     // Run request
-    const response = await grafeasClient.getNote(request);
+    const response = await grafeasClient.createNote(request);
     console.log(response);
   }
 
-  getNote();
-  // [END grafeas_get_note_sample]
+  createNote();
+  // [END grafeas_create_note_sample]
 }
 
 process.on('unhandledRejection', err => {

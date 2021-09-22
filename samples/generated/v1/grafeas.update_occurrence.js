@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
-function main(name) {
-  // [START grafeas_delete_occurrence_sample]
+function main(name, occurrence) {
+  // [START grafeas_update_occurrence_sample]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
@@ -25,6 +24,14 @@ function main(name) {
    *  `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]`.
    */
   // const name = 'abc123'
+  /**
+   *  The updated occurrence.
+   */
+  // const occurrence = ''
+  /**
+   *  The fields to update.
+   */
+  // const updateMask = ''
 
   // Imports the Grafeas library
   const {GrafeasClient} = require('@google-cloud/grafeas').v1;
@@ -32,19 +39,20 @@ function main(name) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function deleteOccurrence() {
+  async function updateOccurrence() {
     // Construct request
     const request = {
       name,
+      occurrence,
     };
 
     // Run request
-    const response = await grafeasClient.deleteOccurrence(request);
+    const response = await grafeasClient.updateOccurrence(request);
     console.log(response);
   }
 
-  deleteOccurrence();
-  // [END grafeas_delete_occurrence_sample]
+  updateOccurrence();
+  // [END grafeas_update_occurrence_sample]
 }
 
 process.on('unhandledRejection', err => {

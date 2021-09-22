@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
 function main(parent) {
-  // [START grafeas_list_occurrences_sample]
+  // [START grafeas_list_notes_sample]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
   /**
-   *  The name of the project to list occurrences for in the form of
+   *  The name of the project to list notes for in the form of
    *  `projects/[PROJECT_ID]`.
    */
   // const parent = 'abc123'
@@ -30,8 +29,8 @@ function main(parent) {
    */
   // const filter = 'abc123'
   /**
-   *  Number of occurrences to return in the list. Must be positive. Max allowed
-   *  page size is 1000. If not specified, page size defaults to 20.
+   *  Number of notes to return in the list. Must be positive. Max allowed page
+   *  size is 1000. If not specified, page size defaults to 20.
    */
   // const pageSize = 1234
   /**
@@ -45,21 +44,21 @@ function main(parent) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function listOccurrences() {
+  async function listNotes() {
     // Construct request
     const request = {
       parent,
     };
 
     // Run request
-    const iterable = await grafeasClient.listOccurrencesAsync(request);
+    const iterable = await grafeasClient.listNotesAsync(request);
     for await (const response of iterable) {
-        console.log(response);
+      console.log(response);
     }
   }
 
-  listOccurrences();
-  // [END grafeas_list_occurrences_sample]
+  listNotes();
+  // [END grafeas_list_notes_sample]
 }
 
 process.on('unhandledRejection', err => {

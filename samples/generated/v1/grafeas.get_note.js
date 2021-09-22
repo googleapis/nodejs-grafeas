@@ -12,23 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
-function main(parent, occurrence) {
-  // [START grafeas_create_occurrence_sample]
+function main(name) {
+  // [START grafeas_get_note_sample]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
   /**
-   *  The name of the project in the form of `projects/[PROJECT_ID]`, under which
-   *  the occurrence is to be created.
+   *  The name of the note in the form of
+   *  `projects/[PROVIDER_ID]/notes/[NOTE_ID]`.
    */
-  // const parent = 'abc123'
-  /**
-   *  The occurrence to create.
-   */
-  // const occurrence = ''
+  // const name = 'abc123'
 
   // Imports the Grafeas library
   const {GrafeasClient} = require('@google-cloud/grafeas').v1;
@@ -36,20 +31,19 @@ function main(parent, occurrence) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function createOccurrence() {
+  async function getNote() {
     // Construct request
     const request = {
-      parent,
-      occurrence,
+      name,
     };
 
     // Run request
-    const response = await grafeasClient.createOccurrence(request);
+    const response = await grafeasClient.getNote(request);
     console.log(response);
   }
 
-  createOccurrence();
-  // [END grafeas_create_occurrence_sample]
+  getNote();
+  // [END grafeas_get_note_sample]
 }
 
 process.on('unhandledRejection', err => {

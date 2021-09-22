@@ -12,32 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
-function main(parent) {
-  // [START grafeas_list_notes_sample]
+function main(name, note) {
+  // [START grafeas_update_note_sample]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
   /**
-   *  The name of the project to list notes for in the form of
-   *  `projects/[PROJECT_ID]`.
+   *  The name of the note in the form of
+   *  `projects/[PROVIDER_ID]/notes/[NOTE_ID]`.
    */
-  // const parent = 'abc123'
+  // const name = 'abc123'
   /**
-   *  The filter expression.
+   *  The updated note.
    */
-  // const filter = 'abc123'
+  // const note = ''
   /**
-   *  Number of notes to return in the list. Must be positive. Max allowed page
-   *  size is 1000. If not specified, page size defaults to 20.
+   *  The fields to update.
    */
-  // const pageSize = 1234
-  /**
-   *  Token to provide to skip to a particular spot in the list.
-   */
-  // const pageToken = 'abc123'
+  // const updateMask = ''
 
   // Imports the Grafeas library
   const {GrafeasClient} = require('@google-cloud/grafeas').v1;
@@ -45,21 +39,20 @@ function main(parent) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function listNotes() {
+  async function updateNote() {
     // Construct request
     const request = {
-      parent,
+      name,
+      note,
     };
 
     // Run request
-    const iterable = await grafeasClient.listNotesAsync(request);
-    for await (const response of iterable) {
-        console.log(response);
-    }
+    const response = await grafeasClient.updateNote(request);
+    console.log(response);
   }
 
-  listNotes();
-  // [END grafeas_list_notes_sample]
+  updateNote();
+  // [END grafeas_update_note_sample]
 }
 
 process.on('unhandledRejection', err => {
