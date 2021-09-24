@@ -12,23 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
-function main(parent, occurrences) {
-  // [START grafeas_v1_generated_Grafeas_BatchCreateOccurrences_async]
+function main(parent, notes) {
+  // [START grafeas_v1_generated_Grafeas_BatchCreateNotes_async]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
   /**
    *  The name of the project in the form of `projects/[PROJECT_ID]`, under which
-   *  the occurrences are to be created.
+   *  the notes are to be created.
    */
   // const parent = 'abc123'
   /**
-   *  The occurrences to create. Max allowed length is 1000.
+   *  The notes to create. Max allowed length is 1000.
    */
-  // const occurrences = 1234
+  // const notes = 1234
 
   // Imports the Grafeas library
   const {GrafeasClient} = require('@google-cloud/grafeas').v1;
@@ -36,20 +35,20 @@ function main(parent, occurrences) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function batchCreateOccurrences() {
+  async function batchCreateNotes() {
     // Construct request
     const request = {
       parent,
-      occurrences,
+      notes,
     };
 
     // Run request
-    const response = await grafeasClient.batchCreateOccurrences(request);
+    const response = await grafeasClient.batchCreateNotes(request);
     console.log(response);
   }
 
-  batchCreateOccurrences();
-  // [END grafeas_v1_generated_Grafeas_BatchCreateOccurrences_async]
+  batchCreateNotes();
+  // [END grafeas_v1_generated_Grafeas_BatchCreateNotes_async]
 }
 
 process.on('unhandledRejection', err => {

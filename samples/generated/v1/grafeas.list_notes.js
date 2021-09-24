@@ -12,19 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
-function main(name) {
-  // [START grafeas_v1_generated_Grafeas_GetOccurrence_async]
+function main(parent) {
+  // [START grafeas_v1_generated_Grafeas_ListNotes_async]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
   /**
-   *  The name of the occurrence in the form of
-   *  `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]`.
+   *  The name of the project to list notes for in the form of
+   *  `projects/[PROJECT_ID]`.
    */
-  // const name = 'abc123'
+  // const parent = 'abc123'
+  /**
+   *  The filter expression.
+   */
+  // const filter = 'abc123'
+  /**
+   *  Number of notes to return in the list. Must be positive. Max allowed page
+   *  size is 1000. If not specified, page size defaults to 20.
+   */
+  // const pageSize = 1234
+  /**
+   *  Token to provide to skip to a particular spot in the list.
+   */
+  // const pageToken = 'abc123'
 
   // Imports the Grafeas library
   const {GrafeasClient} = require('@google-cloud/grafeas').v1;
@@ -32,19 +44,21 @@ function main(name) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function getOccurrence() {
+  async function listNotes() {
     // Construct request
     const request = {
-      name,
+      parent,
     };
 
     // Run request
-    const response = await grafeasClient.getOccurrence(request);
-    console.log(response);
+    const iterable = await grafeasClient.listNotesAsync(request);
+    for await (const response of iterable) {
+      console.log(response);
+    }
   }
 
-  getOccurrence();
-  // [END grafeas_v1_generated_Grafeas_GetOccurrence_async]
+  listNotes();
+  // [END grafeas_v1_generated_Grafeas_ListNotes_async]
 }
 
 process.on('unhandledRejection', err => {

@@ -12,27 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
-function main(parent, noteId, note) {
-  // [START grafeas_v1_generated_Grafeas_CreateNote_async]
+function main(parent) {
+  // [START grafeas_v1_generated_Grafeas_ListOccurrences_async]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
   /**
-   *  The name of the project in the form of `projects/[PROJECT_ID]`, under which
-   *  the note is to be created.
+   *  The name of the project to list occurrences for in the form of
+   *  `projects/[PROJECT_ID]`.
    */
   // const parent = 'abc123'
   /**
-   *  The ID to use for this note.
+   *  The filter expression.
    */
-  // const noteId = 'abc123'
+  // const filter = 'abc123'
   /**
-   *  The note to create.
+   *  Number of occurrences to return in the list. Must be positive. Max allowed
+   *  page size is 1000. If not specified, page size defaults to 20.
    */
-  // const note = ''
+  // const pageSize = 1234
+  /**
+   *  Token to provide to skip to a particular spot in the list.
+   */
+  // const pageToken = 'abc123'
 
   // Imports the Grafeas library
   const {GrafeasClient} = require('@google-cloud/grafeas').v1;
@@ -40,21 +44,21 @@ function main(parent, noteId, note) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function createNote() {
+  async function listOccurrences() {
     // Construct request
     const request = {
       parent,
-      noteId,
-      note,
     };
 
     // Run request
-    const response = await grafeasClient.createNote(request);
-    console.log(response);
+    const iterable = await grafeasClient.listOccurrencesAsync(request);
+    for await (const response of iterable) {
+      console.log(response);
+    }
   }
 
-  createNote();
-  // [END grafeas_v1_generated_Grafeas_CreateNote_async]
+  listOccurrences();
+  // [END grafeas_v1_generated_Grafeas_ListOccurrences_async]
 }
 
 process.on('unhandledRejection', err => {
