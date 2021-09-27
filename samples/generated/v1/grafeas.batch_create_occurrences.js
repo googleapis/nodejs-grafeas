@@ -12,32 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
-function main(parent) {
-  // [START containeranalysis_v1_generated_Grafeas_ListOccurrences_async]
+function main(parent, occurrences) {
+  // [START containeranalysis_v1_generated_Grafeas_BatchCreateOccurrences_async]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
   /**
-   *  The name of the project to list occurrences for in the form of
-   *  `projects/[PROJECT_ID]`.
+   *  The name of the project in the form of `projects/[PROJECT_ID]`, under which
+   *  the occurrences are to be created.
    */
   // const parent = 'abc123'
   /**
-   *  The filter expression.
+   *  The occurrences to create. Max allowed length is 1000.
    */
-  // const filter = 'abc123'
-  /**
-   *  Number of occurrences to return in the list. Must be positive. Max allowed
-   *  page size is 1000. If not specified, page size defaults to 20.
-   */
-  // const pageSize = 1234
-  /**
-   *  Token to provide to skip to a particular spot in the list.
-   */
-  // const pageToken = 'abc123'
+  // const occurrences = 1234
 
   // Imports the Grafeas library
   const {GrafeasClient} = require('@google-cloud/grafeas').v1;
@@ -45,21 +35,20 @@ function main(parent) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function listOccurrences() {
+  async function batchCreateOccurrences() {
     // Construct request
     const request = {
       parent,
+      occurrences,
     };
 
     // Run request
-    const iterable = await grafeasClient.listOccurrencesAsync(request);
-    for await (const response of iterable) {
-        console.log(response);
-    }
+    const response = await grafeasClient.batchCreateOccurrences(request);
+    console.log(response);
   }
 
-  listOccurrences();
-  // [END containeranalysis_v1_generated_Grafeas_ListOccurrences_async]
+  batchCreateOccurrences();
+  // [END containeranalysis_v1_generated_Grafeas_BatchCreateOccurrences_async]
 }
 
 process.on('unhandledRejection', err => {

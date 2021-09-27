@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
 function main(name) {
-  // [START containeranalysis_v1_generated_Grafeas_GetOccurrence_async]
+  // [START containeranalysis_v1_generated_Grafeas_DeleteNote_async]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
   /**
-   *  The name of the occurrence in the form of
-   *  `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]`.
+   *  The name of the note in the form of
+   *  `projects/[PROVIDER_ID]/notes/[NOTE_ID]`.
    */
   // const name = 'abc123'
 
@@ -32,19 +31,19 @@ function main(name) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function getOccurrence() {
+  async function deleteNote() {
     // Construct request
     const request = {
       name,
     };
 
     // Run request
-    const response = await grafeasClient.getOccurrence(request);
+    const response = await grafeasClient.deleteNote(request);
     console.log(response);
   }
 
-  getOccurrence();
-  // [END containeranalysis_v1_generated_Grafeas_GetOccurrence_async]
+  deleteNote();
+  // [END containeranalysis_v1_generated_Grafeas_DeleteNote_async]
 }
 
 process.on('unhandledRejection', err => {

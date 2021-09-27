@@ -12,19 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
-function main(name) {
-  // [START containeranalysis_v1_generated_Grafeas_GetNote_async]
+function main(parent, notes) {
+  // [START containeranalysis_v1_generated_Grafeas_BatchCreateNotes_async]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
   /**
-   *  The name of the note in the form of
-   *  `projects/[PROVIDER_ID]/notes/[NOTE_ID]`.
+   *  The name of the project in the form of `projects/[PROJECT_ID]`, under which
+   *  the notes are to be created.
    */
-  // const name = 'abc123'
+  // const parent = 'abc123'
+  /**
+   *  The notes to create. Max allowed length is 1000.
+   */
+  // const notes = 1234
 
   // Imports the Grafeas library
   const {GrafeasClient} = require('@google-cloud/grafeas').v1;
@@ -32,19 +35,20 @@ function main(name) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function getNote() {
+  async function batchCreateNotes() {
     // Construct request
     const request = {
-      name,
+      parent,
+      notes,
     };
 
     // Run request
-    const response = await grafeasClient.getNote(request);
+    const response = await grafeasClient.batchCreateNotes(request);
     console.log(response);
   }
 
-  getNote();
-  // [END containeranalysis_v1_generated_Grafeas_GetNote_async]
+  batchCreateNotes();
+  // [END containeranalysis_v1_generated_Grafeas_BatchCreateNotes_async]
 }
 
 process.on('unhandledRejection', err => {

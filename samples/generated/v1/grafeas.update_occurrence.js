@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
-function main(name) {
-  // [START containeranalysis_v1_generated_Grafeas_GetOccurrenceNote_async]
+function main(name, occurrence) {
+  // [START containeranalysis_v1_generated_Grafeas_UpdateOccurrence_async]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
@@ -25,6 +24,14 @@ function main(name) {
    *  `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]`.
    */
   // const name = 'abc123'
+  /**
+   *  The updated occurrence.
+   */
+  // const occurrence = ''
+  /**
+   *  The fields to update.
+   */
+  // const updateMask = ''
 
   // Imports the Grafeas library
   const {GrafeasClient} = require('@google-cloud/grafeas').v1;
@@ -32,19 +39,20 @@ function main(name) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function getOccurrenceNote() {
+  async function updateOccurrence() {
     // Construct request
     const request = {
       name,
+      occurrence,
     };
 
     // Run request
-    const response = await grafeasClient.getOccurrenceNote(request);
+    const response = await grafeasClient.updateOccurrence(request);
     console.log(response);
   }
 
-  getOccurrenceNote();
-  // [END containeranalysis_v1_generated_Grafeas_GetOccurrenceNote_async]
+  updateOccurrence();
+  // [END containeranalysis_v1_generated_Grafeas_UpdateOccurrence_async]
 }
 
 process.on('unhandledRejection', err => {

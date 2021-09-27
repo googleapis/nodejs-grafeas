@@ -12,23 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
-function main(parent, occurrences) {
-  // [START containeranalysis_v1_generated_Grafeas_BatchCreateOccurrences_async]
+function main(parent, noteId, note) {
+  // [START containeranalysis_v1_generated_Grafeas_CreateNote_async]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
   /**
    *  The name of the project in the form of `projects/[PROJECT_ID]`, under which
-   *  the occurrences are to be created.
+   *  the note is to be created.
    */
   // const parent = 'abc123'
   /**
-   *  The occurrences to create. Max allowed length is 1000.
+   *  The ID to use for this note.
    */
-  // const occurrences = 1234
+  // const noteId = 'abc123'
+  /**
+   *  The note to create.
+   */
+  // const note = ''
 
   // Imports the Grafeas library
   const {GrafeasClient} = require('@google-cloud/grafeas').v1;
@@ -36,20 +39,21 @@ function main(parent, occurrences) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function batchCreateOccurrences() {
+  async function createNote() {
     // Construct request
     const request = {
       parent,
-      occurrences,
+      noteId,
+      note,
     };
 
     // Run request
-    const response = await grafeasClient.batchCreateOccurrences(request);
+    const response = await grafeasClient.createNote(request);
     console.log(response);
   }
 
-  batchCreateOccurrences();
-  // [END containeranalysis_v1_generated_Grafeas_BatchCreateOccurrences_async]
+  createNote();
+  // [END containeranalysis_v1_generated_Grafeas_CreateNote_async]
 }
 
 process.on('unhandledRejection', err => {

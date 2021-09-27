@@ -12,27 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
-function main(name, occurrence) {
-  // [START containeranalysis_v1_generated_Grafeas_UpdateOccurrence_async]
+function main(name) {
+  // [START containeranalysis_v1_generated_Grafeas_ListNoteOccurrences_async]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
   /**
-   *  The name of the occurrence in the form of
-   *  `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]`.
+   *  The name of the note to list occurrences for in the form of
+   *  `projects/[PROVIDER_ID]/notes/[NOTE_ID]`.
    */
   // const name = 'abc123'
   /**
-   *  The updated occurrence.
+   *  The filter expression.
    */
-  // const occurrence = ''
+  // const filter = 'abc123'
   /**
-   *  The fields to update.
+   *  Number of occurrences to return in the list.
    */
-  // const updateMask = ''
+  // const pageSize = 1234
+  /**
+   *  Token to provide to skip to a particular spot in the list.
+   */
+  // const pageToken = 'abc123'
 
   // Imports the Grafeas library
   const {GrafeasClient} = require('@google-cloud/grafeas').v1;
@@ -40,20 +43,21 @@ function main(name, occurrence) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function updateOccurrence() {
+  async function listNoteOccurrences() {
     // Construct request
     const request = {
       name,
-      occurrence,
     };
 
     // Run request
-    const response = await grafeasClient.updateOccurrence(request);
-    console.log(response);
+    const iterable = await grafeasClient.listNoteOccurrencesAsync(request);
+    for await (const response of iterable) {
+      console.log(response);
+    }
   }
 
-  updateOccurrence();
-  // [END containeranalysis_v1_generated_Grafeas_UpdateOccurrence_async]
+  listNoteOccurrences();
+  // [END containeranalysis_v1_generated_Grafeas_ListNoteOccurrences_async]
 }
 
 process.on('unhandledRejection', err => {

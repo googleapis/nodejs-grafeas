@@ -12,31 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
-function main(name) {
-  // [START containeranalysis_v1_generated_Grafeas_ListNoteOccurrences_async]
+function main(name, note) {
+  // [START containeranalysis_v1_generated_Grafeas_UpdateNote_async]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
   /**
-   *  The name of the note to list occurrences for in the form of
+   *  The name of the note in the form of
    *  `projects/[PROVIDER_ID]/notes/[NOTE_ID]`.
    */
   // const name = 'abc123'
   /**
-   *  The filter expression.
+   *  The updated note.
    */
-  // const filter = 'abc123'
+  // const note = ''
   /**
-   *  Number of occurrences to return in the list.
+   *  The fields to update.
    */
-  // const pageSize = 1234
-  /**
-   *  Token to provide to skip to a particular spot in the list.
-   */
-  // const pageToken = 'abc123'
+  // const updateMask = ''
 
   // Imports the Grafeas library
   const {GrafeasClient} = require('@google-cloud/grafeas').v1;
@@ -44,21 +39,20 @@ function main(name) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function listNoteOccurrences() {
+  async function updateNote() {
     // Construct request
     const request = {
       name,
+      note,
     };
 
     // Run request
-    const iterable = await grafeasClient.listNoteOccurrencesAsync(request);
-    for await (const response of iterable) {
-        console.log(response);
-    }
+    const response = await grafeasClient.updateNote(request);
+    console.log(response);
   }
 
-  listNoteOccurrences();
-  // [END containeranalysis_v1_generated_Grafeas_ListNoteOccurrences_async]
+  updateNote();
+  // [END containeranalysis_v1_generated_Grafeas_UpdateNote_async]
 }
 
 process.on('unhandledRejection', err => {

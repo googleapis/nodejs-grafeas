@@ -12,23 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 'use strict';
 
-function main(parent, occurrence) {
-  // [START containeranalysis_v1_generated_Grafeas_CreateOccurrence_async]
+function main(name) {
+  // [START containeranalysis_v1_generated_Grafeas_GetOccurrenceNote_async]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
   /**
-   *  The name of the project in the form of `projects/[PROJECT_ID]`, under which
-   *  the occurrence is to be created.
+   *  The name of the occurrence in the form of
+   *  `projects/[PROJECT_ID]/occurrences/[OCCURRENCE_ID]`.
    */
-  // const parent = 'abc123'
-  /**
-   *  The occurrence to create.
-   */
-  // const occurrence = ''
+  // const name = 'abc123'
 
   // Imports the Grafeas library
   const {GrafeasClient} = require('@google-cloud/grafeas').v1;
@@ -36,20 +31,19 @@ function main(parent, occurrence) {
   // Instantiates a client
   const grafeasClient = new GrafeasClient();
 
-  async function createOccurrence() {
+  async function getOccurrenceNote() {
     // Construct request
     const request = {
-      parent,
-      occurrence,
+      name,
     };
 
     // Run request
-    const response = await grafeasClient.createOccurrence(request);
+    const response = await grafeasClient.getOccurrenceNote(request);
     console.log(response);
   }
 
-  createOccurrence();
-  // [END containeranalysis_v1_generated_Grafeas_CreateOccurrence_async]
+  getOccurrenceNote();
+  // [END containeranalysis_v1_generated_Grafeas_GetOccurrenceNote_async]
 }
 
 process.on('unhandledRejection', err => {
