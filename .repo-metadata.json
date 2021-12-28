@@ -13,5 +13,5 @@
   "issue_tracker": "https://github.com/grafeas/grafeas/issues",
   "codeowner_team": "@googleapis/cicd",
   "api_shortname": "grafeas",
-  "library_type": ""
+  "library_type": "GAPIC_AUTO"
 }
