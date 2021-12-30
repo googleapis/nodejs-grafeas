@@ -6,7 +6,6 @@
 
 
 [![npm version](https://img.shields.io/npm/v/@google-cloud/grafeas.svg)](https://www.npmjs.org/package/@google-cloud/grafeas)
-[![codecov](https://img.shields.io/codecov/c/github/googleapis/nodejs-grafeas/main.svg?style=flat)](https://codecov.io/gh/googleapis/nodejs-grafeas)
 
 
 
