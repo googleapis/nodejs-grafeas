@@ -12,5 +12,6 @@
   "name": "grafeas",
   "issue_tracker": "https://github.com/grafeas/grafeas/issues",
   "codeowner_team": "@googleapis/cicd",
+  "api_shortname": "containeranalysis",
   "library_type": "GAPIC_AUTO"
 }
