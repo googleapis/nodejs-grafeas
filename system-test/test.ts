@@ -19,15 +19,9 @@ describe('GrafeasSystemTest', () => {
   it('lists occurrences', async () => {
     const client = new GrafeasClient();
     const projectId = await client.getProjectId();
-    const [resp] = await client.listOccurrences(
-      {
-        parent: client.projectPath(projectId),
-      },
-      {
-        autoPaginate: false,
-        pageSize: 1,
-      }
-    );
+    const resp = await client.listOccurrences({
+      parent: client.projectPath(projectId),
+    });
     assert.ok(resp.length > 0);
   });
 });
