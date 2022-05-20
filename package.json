@@ -47,7 +47,7 @@
   "scripts": {
     "test": "c8 mocha build/test",
     "samples-test": "cd samples/ && npm link ../ && npm install && npm test && cd ../",
-    "system-test": "mocha build/system-test",
+    "system-test": "mocha build/system-test --timeout 120000",
     "presystem-test": "npm run compile",
     "docs": "jsdoc -c .jsdoc.js",
     "lint": "gts check",
