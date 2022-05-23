@@ -15,7 +15,7 @@ import {describe, it} from 'mocha';
 import * as assert from 'assert';
 import {GrafeasClient} from '../src';
 
-describe('GrafeasSystemTest', () => {
+describe('GrafeasSystemTest', async () => {
   it('lists occurrences', async () => {
     const client = new GrafeasClient();
     const projectId = await client.getProjectId();
