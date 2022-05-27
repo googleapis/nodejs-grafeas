@@ -21,6 +21,7 @@ describe('GrafeasSystemTest', async () => {
     const projectId = await client.getProjectId();
     const resp = await client.listOccurrences({
       parent: client.projectPath(projectId),
+      pageSize: 1,
     });
     assert.ok(resp.length > 0);
   });
