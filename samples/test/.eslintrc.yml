@@ -1,4 +1,0 @@
----
-rules:
-  node/no-extraneous-require: off
-  no-warning-comments: off
